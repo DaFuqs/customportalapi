@@ -1,21 +1,21 @@
 package net.kyrptonaught.customportalapi.portal;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.Item;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.resources.Identifier;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.HashSet;
 import java.util.function.BiFunction;
 
 public class PortalIgnitionSource {
-    public final static PortalIgnitionSource FIRE = new PortalIgnitionSource(SourceType.BLOCKPLACED, Registries.BLOCK.getId(Blocks.FIRE));
+    public final static PortalIgnitionSource FIRE = new PortalIgnitionSource(SourceType.BLOCKPLACED, BuiltInRegistries.BLOCK.getKey(Blocks.FIRE));
     public final static PortalIgnitionSource WATER = FluidSource(Fluids.WATER);
 
     public enum SourceType {
@@ -25,25 +25,25 @@ public class PortalIgnitionSource {
     private static final HashSet<Item> USEITEMS = new HashSet<>();
     public SourceType sourceType;
     public Identifier ignitionSourceID;
-    public PlayerEntity player;
+    public Player player;
 
     private PortalIgnitionSource(SourceType sourceType, Identifier ignitionSourceID) {
         this.sourceType = sourceType;
         this.ignitionSourceID = ignitionSourceID;
     }
 
-    public PortalIgnitionSource withPlayer(PlayerEntity player) {
+    public PortalIgnitionSource withPlayer(Player player) {
         this.player = player;
         return this;
     }
 
     public static PortalIgnitionSource ItemUseSource(Item item) {
         USEITEMS.add(item);
-        return new PortalIgnitionSource(SourceType.USEITEM, Registries.ITEM.getId(item));
+        return new PortalIgnitionSource(SourceType.USEITEM, BuiltInRegistries.ITEM.getKey(item));
     }
 
     public static PortalIgnitionSource FluidSource(Fluid fluid) {
-        return new PortalIgnitionSource(SourceType.FLUID, Registries.FLUID.getId(fluid));
+        return new PortalIgnitionSource(SourceType.FLUID, BuiltInRegistries.FLUID.getKey(fluid));
     }
 
     public static PortalIgnitionSource CustomSource(Identifier ignitionSourceID) {
@@ -52,16 +52,16 @@ public class PortalIgnitionSource {
 
     // TODO: implement
     @Deprecated
-    public void withCondition(BiFunction<World, BlockPos, Boolean> condition) {
+    public void withCondition(BiFunction<Level, BlockPos, Boolean> condition) {
 
     }
 
     public boolean isWater() {
-        return Registries.FLUID.get(ignitionSourceID).isIn(FluidTags.WATER);
+        return BuiltInRegistries.FLUID.getValue(ignitionSourceID).is(FluidTags.WATER);
     }
 
     public boolean isLava() {
-        return Registries.FLUID.get(ignitionSourceID).isIn(FluidTags.LAVA);
+        return BuiltInRegistries.FLUID.getValue(ignitionSourceID).is(FluidTags.LAVA);
     }
 
     public static boolean isRegisteredIgnitionSourceWith(Item item) {

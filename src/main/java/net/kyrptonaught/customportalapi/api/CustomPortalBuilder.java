@@ -10,13 +10,13 @@ import net.kyrptonaught.customportalapi.portal.PortalIgnitionSource;
 import net.kyrptonaught.customportalapi.util.ColorUtil;
 import net.kyrptonaught.customportalapi.util.PortalLink;
 import net.kyrptonaught.customportalapi.util.SHOULDTP;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.Item;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -53,7 +53,7 @@ public class CustomPortalBuilder {
      * @return the raw PortalLink created from this builder.
      */
     public PortalLink registerPortal() {
-        CustomPortalApiRegistry.addPortal(Registries.BLOCK.get(portalLink.block), portalLink);
+        CustomPortalApiRegistry.addPortal(BuiltInRegistries.BLOCK.getValue(portalLink.block), portalLink);
         return portalLink;
     }
 
@@ -65,7 +65,7 @@ public class CustomPortalBuilder {
      */
     @Deprecated
     public PortalLink registerPortalForced() {
-        CustomPortalApiRegistry.forceAddPortal(Registries.BLOCK.get(portalLink.block), portalLink);
+        CustomPortalApiRegistry.forceAddPortal(BuiltInRegistries.BLOCK.getValue(portalLink.block), portalLink);
         return portalLink;
     }
 
@@ -85,7 +85,7 @@ public class CustomPortalBuilder {
      * @param block The Block to be used as the portal's frame block
      */
     public CustomPortalBuilder frameBlock(Block block) {
-        portalLink.block = Registries.BLOCK.getId(block);
+        portalLink.block = BuiltInRegistries.BLOCK.getKey(block);
         return this;
     }
 
@@ -102,7 +102,7 @@ public class CustomPortalBuilder {
     /**
      * Specify the color to be used to tint the portal block.
      *
-     * @param color Single Color int value used for tinting. See {@link net.minecraft.util.DyeColor}
+     * @param color Single Color int value used for tinting. See {@link net.minecraft.world.item.DyeColor}
      */
     public CustomPortalBuilder tintColor(int color) {
         portalLink.colorID = color;
@@ -232,7 +232,7 @@ public class CustomPortalBuilder {
      * Register a sound to be played when the player in standing in the portal.
      * CPASoundEventData is just a stub for PositionSoundAmbience as it does not exist serverside
      */
-    public CustomPortalBuilder registerInPortalAmbienceSound(Function<PlayerEntity, CPASoundEventData> event) {
+    public CustomPortalBuilder registerInPortalAmbienceSound(Function<Player, CPASoundEventData> event) {
         portalLink.getInPortalAmbienceEvent().register(event);
         return this;
     }
@@ -241,7 +241,7 @@ public class CustomPortalBuilder {
      * Register a sound to be played when the player teleports.
      * CPASoundEventData is just a stub for PositionSoundAmbience as it does not exist serverside
      */
-    public CustomPortalBuilder registerPostTPPortalAmbience(Function<PlayerEntity, CPASoundEventData> event) {
+    public CustomPortalBuilder registerPostTPPortalAmbience(Function<Player, CPASoundEventData> event) {
         portalLink.getPostTpPortalAmbienceEvent().register(event);
         return this;
     }
