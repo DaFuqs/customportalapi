@@ -5,13 +5,13 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "portalLighters.AbstractFireMixin",
-    "portalLighters.FluidBlockPlacedMixin",
-    "portalLighters.PotionEntityMixin"
+    "portalLighters.LiquidBlockPlacedMixin",
+    "portalLighters.AbstractThrownPotionMixin"
   ],
   "client": [
-    "client.ClientPlayerEntityMixin",
-    "client.InGameHudMixin",
-    "client.PortalManagerAccessor",
+    "client.LocalPlayerMixin",
+    "client.GuiMixin",
+    "client.PortalProcessorAccessor",
     "client.WorldRendererMixin"
   ],
   "injectors": {

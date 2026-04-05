@@ -2,8 +2,8 @@ package net.kyrptonaught.customportalapi.portal.linking;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.resources.Identifier;
+import net.minecraft.core.BlockPos;
 
 public class DimensionalBlockPos {
     public static final Codec<DimensionalBlockPos> CODEC = RecordCodecBuilder.create(
@@ -21,7 +21,7 @@ public class DimensionalBlockPos {
     }
 
     public DimensionalBlockPos(Identifier dimension, Long pos) {
-        this(dimension, BlockPos.fromLong(pos));
+        this(dimension, BlockPos.of(pos));
     }
 
     public Identifier getDimension() {
